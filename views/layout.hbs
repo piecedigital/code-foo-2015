@@ -2,8 +2,34 @@
 <html>
 	<head>
 		<title>{{title}}</title>
+		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
 	<body>
-		{{{body}}}
+		<div id="title">{{page}}</div>
+		<div class="outline">
+			<header>
+				<a href="/videos" id="videos-button" class="a-tag {{videoClass}}">VIDEOS</a><!--
+				--><a href="/articles" id="articles-button" class="a-tag {{articleClass}}">ARTICLES</a>
+			</header>
+			<div class="white">
+				<div id="data-injection">
+					{{{body}}}
+				</div>
+				<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+				<script type="text/javascript">
+					var iter = 5;
+					if(window.location.search) {
+						iter += parseInt( window.location.search.split("=").pop() );
+					}
+					$(document).on("click", "#load-more", function() {
+						window.location.href=window.location.pathname + "?startindex=" + iter;
+						console.log("click");
+					});
+				</script>
+				<footer>
+					<button id="load-more" class="faded a-tag button">Load More</button>
+				</footer>
+			</div>
+		</div>
 	</body>
 </html>

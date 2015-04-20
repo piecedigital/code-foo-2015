@@ -2,7 +2,6 @@ var http = require("http");
 var express = require("express");
 var app = express();
 var path = require("path");
-var MongoClient = require("mongodb");
 var port = process.env["PORT"] || 8080;
 
 // configure
@@ -10,85 +9,117 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.set("view options", { layout: "layout" });
 app.use(express.static(path.join(__dirname, 'public')));
-var Server = MongoClient.Server,
-Db = MongoClient.Db,
-db = new Db( "code-foo", new Server( "localhost", 27017 ) );
 
 var url = "ign-apis.herokuapp.com";
 var videosLink = url + "/videos";
 var articlesLink = url + "/articles";
-
-var videosOpt = {
-	host: url,
-	port: 80,
-	path: videosLink + "?startIndex=30&count=5",
-	method: "GET"
-};
-var articlesOpt = {
-	host: url,
-	port: 80,
-	path: articlesLink + "?startIndex=30&count=5",
-	method: "GET"
-};
+var index = 0;
 
 app.get("/", function(req, resp) {
-	db.collection("videos").find({}).toArray( function(err, doc) {
-		if (err) throw err;
-		console.log("Loaded page: videos");
-		db.collection("articles").find({}).toArray( function(err, doc2) {
-			if (err) throw err;
-			console.log("Loaded page: articles");
+	resp.redirect( "/videos" );
+});
 
+app.get("/videos", function(req, resp) {
+	if(req.query.startindex) {
+		index = parseInt(req.query.startindex);
+	} else {
+		index = 0;
+	}
+	console.log(index);
+	var startIndex = index,
+	count = 5,
+	query = "";
+	query += "?startIndex=" + startIndex || "";
+	query += "&count=" + count || "";
+	var fetch = http.request({
+		host: url,
+		port: 80,
+		path: videosLink + query,
+		method: "GET"
+	}, function(res) {
+		var buffer = "";
+		res.on("data", function(chunk) {
+			buffer += chunk;
+		});
+		res.on("end", function() {
+			buffer = JSON.parse(buffer);
+			console.log("Loaded page: videos");
 			var fullArray = [];
-			doc[0]["video-data"].map(function(elem) {
-				var date = new Date(elem.publishDate);
-				elem.year = date.getFullYear();
-				elem.month = date.getMonth()+1;
-				elem.day = date.getDate();
-				time = Math.floor( elem.duration / 60 );
-				time2 = Math.round( 60 * ( ( ( elem.duration / 60 ).toFixed(2) ) % 1 ) );
+			//console.log(buffer);
+			buffer.data.map(function(elem, ind) {
+				var date = new Date(elem.metadata.publishDate);
+				elem.metadata.year = date.getFullYear();
+				elem.metadata.month = date.getMonth()+1;
+				elem.metadata.day = date.getDate();
+				time = Math.floor( elem.metadata.duration / 60 );
+				time2 = Math.round( 60 * ( ( ( elem.metadata.duration / 60 ).toFixed(2) ) % 1 ) );
+				if(time2 < 10) { time2 = "0" + time2; }
 				fullTime = time + ":" + time2;
-				elem.fullTime = fullTime;
-				console.log(fullTime);
-				if(elem.month < 10) { elem.month = "0" + elem.month; }
-				if(elem.day < 10) { elem.day = "0" + elem.day; }
-				fullArray.push(elem);
+				elem.metadata.fullTime = fullTime;
+				elem.metadata.index = index + 1 + ind;
+				//console.log(fullTime);
+				if(elem.metadata.month < 10) { elem.metadata.month = "0" + elem.metadata.month; }
+				if(elem.metadata.day < 10) { elem.metadata.day = "0" + elem.metadata.day; }
+				fullArray.push(elem.metadata);
 			});
-			doc2[0]["article-data"].map(function(elem) {
-				var date = new Date(elem.publishDate);
-				elem.year = date.getFullYear();
-				elem.month = date.getMonth()+1;
-				elem.day = date.getDate();
-				if(elem.month < 10) { elem.month = "0" + elem.month; }
-				if(elem.day < 10) { elem.day = "0" + elem.day; }
-				fullArray.push(elem);
-			});
+			/*
 			fullArray.sort(function(a, b) {
 				return a.publishDate < b.publishDate;
 			});
-			resp.render( "index", { title : "Videos and Articles", items : fullArray } );
-			//console.log(fullArray)
-		} );
-	} );
-});
-app.get("/videos", function(req, resp) {
-	console.log("getting page...");
-	db.collection("videos").find({}).toArray( function(err, doc) {
-		if (err) throw err;
-		resp.send(doc);
-		console.log("Loaded page: videos");
-	} );
+		*/
+			//console.log(fullArray);
+			resp.render( "index", { title : "IGN API App", items : fullArray, videoClass : "selected", articleClass : "", page : "VIDEOS" } );
+		});
+	});
+	fetch.end();
 });
 app.get("/articles", function(req, resp) {
-	console.log("getting page...");
-	db.collection("articles").find({}).toArray( function(err, doc) {
-		if (err) throw err;
-		resp.send( JSON.stringify( doc ) );
-		console.log("Loaded page: articles");
-	} );
+	if(req.query.startindex) {
+		index = parseInt(req.query.startindex);
+	} else {
+		index = 0;
+	}
+	var startIndex = index,
+	count = 5,
+	query = "";
+	query += "?startIndex=" + startIndex || "";
+	query += "&count=" + count || "";
+	var fetch = http.request({
+		host: url,
+		port: 80,
+		path: articlesLink + query,
+		method: "GET"
+	}, function(res) {
+		var buffer = "";
+		res.on("data", function(chunk) {
+			buffer += chunk;
+		});
+		res.on("end", function() {
+			buffer = JSON.parse(buffer);
+			console.log("Loaded page: articles");
+			var fullArray = [];
+			//console.log(buffer);
+			buffer.data.map(function(elem, ind) {
+				var date = new Date(elem.metadata.publishDate);
+				elem.metadata.year = date.getFullYear();
+				elem.metadata.month = date.getMonth()+1;
+				elem.metadata.day = date.getDate();
+				elem.metadata.index = index + 1 + ind;
+				//console.log(fullTime);
+				if(elem.metadata.month < 10) { elem.metadata.month = "0" + elem.metadata.month; }
+				if(elem.metadata.day < 10) { elem.metadata.day = "0" + elem.metadata.day; }
+				fullArray.push(elem.metadata);
+			});
+			/*
+			fullArray.sort(function(a, b) {
+				return a.publishDate < b.publishDate;
+			});
+*/
+			resp.render( "index", { title : "IGN API App", items : fullArray, videoClass : "", articleClass : "selected", page : "ARTICLES" } );
+		});
+	});
+	fetch.end();
 });
 
-db.open(function(err, db) {
-	app.listen(port);
-	console.log("listening on port " + port)
-});
+app.listen(port);
+console.log("listening on port " + port)

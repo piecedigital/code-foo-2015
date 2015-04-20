@@ -1,19 +1,21 @@
 <section>
-	<ul>
-		{{#each items}}
-			<div class="item">
-				{{!-- only post this is it's an article --}}		
-				{{#if headline}}
-					<a href="http://ign.com/articles/{{year}}/{{month}}/{{day}}/{{slug}}"><h2 class="">{{headline}}</h2></a>
-					<h3>{{articleType}}</h3>
-				{{/if}}
-				{{!-- only post this is it's an video --}}			
-				{{#if name}}
-					<a href="{{url}}"><h1 class="">{{name}}</h1></a>
-					<h3>{{genre}}</h3>
-					<h5>{{fullTime}}</h5>
-				{{/if}}
-			</div>
-		{{/each}}
-	</ul>
+	<div class="page-wrap">
+		<ul>
+			{{#each items}}
+				<div class="item">
+					{{!-- only post this is it's an article --}}
+					{{#if headline}}
+						<a href="http://ign.com/articles/{{year}}/{{month}}/{{day}}/{{slug}}"><h2 class="in-b">{{index}}: {{headline}}</h2></a>
+						<h3 class="faded">{{articleType}}</h3>
+					{{/if}}
+					{{!-- only post this is it's an video --}}			
+					{{#if name}}
+						<a href="{{url}}"><h1 class="margin-right">{{index}}: {{name}}</h1></a>
+						<h5 class="faded top-right">{{fullTime}}</h5>
+						<h3 class="faded">{{genre}}</h3>
+					{{/if}}
+				</div>
+			{{/each}}
+		</ul>
+	</div>
 </section>
