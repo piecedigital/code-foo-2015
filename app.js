@@ -27,7 +27,7 @@ app.get("/videos", function(req, resp) {
 	}
 	console.log(index);
 	var startIndex = index,
-	count = 5,
+	count = 20,
 	query = "";
 	query += "?startIndex=" + startIndex || "";
 	query += "&count=" + count || "";
@@ -57,6 +57,7 @@ app.get("/videos", function(req, resp) {
 				fullTime = time + ":" + time2;
 				elem.metadata.fullTime = fullTime;
 				elem.metadata.index = index + 1 + ind;
+				if(elem.metadata.index < 10) { elem.metadata.index = "0" + elem.metadata.index; }
 				//console.log(fullTime);
 				if(elem.metadata.month < 10) { elem.metadata.month = "0" + elem.metadata.month; }
 				if(elem.metadata.day < 10) { elem.metadata.day = "0" + elem.metadata.day; }
@@ -80,7 +81,7 @@ app.get("/articles", function(req, resp) {
 		index = 0;
 	}
 	var startIndex = index,
-	count = 5,
+	count = 20,
 	query = "";
 	query += "?startIndex=" + startIndex || "";
 	query += "&count=" + count || "";
@@ -105,6 +106,7 @@ app.get("/articles", function(req, resp) {
 				elem.metadata.month = date.getMonth()+1;
 				elem.metadata.day = date.getDate();
 				elem.metadata.index = index + 1 + ind;
+				if(elem.metadata.index < 10) { elem.metadata.index = "0" + elem.metadata.index; }
 				//console.log(fullTime);
 				if(elem.metadata.month < 10) { elem.metadata.month = "0" + elem.metadata.month; }
 				if(elem.metadata.day < 10) { elem.metadata.day = "0" + elem.metadata.day; }
