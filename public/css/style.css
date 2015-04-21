@@ -97,12 +97,13 @@ header {
 .outline {
 	position: fixed;
 	top: 0;
+	left: 0;
 	height: 100vh;
-	padding: 5em 0 7em;
+	padding: 5em 1em 7em 1.4em;
 	overflow: hidden;
 	box-sizing: border-box;
 }
-.white {
+.items-list {
 	padding: 1em 0;
 	background: white;
 	height: 100%;
@@ -130,6 +131,15 @@ ul {
 	background: transparent;
 	border: none;
 	font-size: 1.2em;
+}
+
+@media screen and (max-width: 400px) {
+	* {
+		font-size: .97em;
+	}
+	#videos-button, #articles-button {
+		width: 8em;
+	}
 }
 
 ::-webkit-scrollbar {
