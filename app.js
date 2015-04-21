@@ -63,11 +63,6 @@ app.get("/videos", function(req, resp) {
 				if(elem.metadata.day < 10) { elem.metadata.day = "0" + elem.metadata.day; }
 				fullArray.push(elem.metadata);
 			});
-			/*
-			fullArray.sort(function(a, b) {
-				return a.publishDate < b.publishDate;
-			});
-		*/
 			//console.log(fullArray);
 			resp.render( "index", { title : "IGN API App", items : fullArray, videoClass : "selected", articleClass : "", page : "VIDEOS" } );
 		});
@@ -112,11 +107,6 @@ app.get("/articles", function(req, resp) {
 				if(elem.metadata.day < 10) { elem.metadata.day = "0" + elem.metadata.day; }
 				fullArray.push(elem.metadata);
 			});
-			/*
-			fullArray.sort(function(a, b) {
-				return a.publishDate < b.publishDate;
-			});
-*/
 			resp.render( "index", { title : "IGN API App", items : fullArray, videoClass : "", articleClass : "selected", page : "ARTICLES" } );
 		});
 	});
