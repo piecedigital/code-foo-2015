@@ -29,11 +29,11 @@ The final one is "word-search-thorough-error.js" (sorry for the long names). It 
 
 4. Using [this API](http://ign-apis.herokuapp.com), pull and display a list of both articles and videos.
 
-Answer: The file for the plain version is "plain-app.js."
+Answer: The file for the plain version is "plain-app.js." It has two routes: "/videos" and "/articles".
 
 5. Using the results from the previous question, create a web/ios/android application that displays the results and matches [this design](https://github.com/ign/code-foo-2015/blob/master/design.png). The application should be responsive to common screen/device sizes.
 
-Answer: The main file for this "app.js". I've provided every file needed, including the "node_modules" file for convenience.
+Answer: The main file for this "app.js". I've provided every file needed, including the "node_modules" file for convenience. It has 3 routes "/", "/videos" and "/articles". The "/" routes redirects to "/videos"
 
 Bonus Question
 --------------
