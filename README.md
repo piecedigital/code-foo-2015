@@ -9,7 +9,7 @@ IGN's Code-Foo 2015 is open to US residents only.  All answers must be completed
 
 1. Create a 2-5 minute video introducing yourself and tell us why we should choose you for the Code-Foo program.
 
-Answer: [My video]().
+Answer: [My video](https://youtu.be/E3BQgEqUOc4).
 
 2. How many ping-pong balls can you fit in 747? Describe each step in your thought process.
 

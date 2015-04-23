@@ -24,11 +24,35 @@
 					}
 					$(document).on("click", "#load-more", function() {
 						window.location.href=window.location.pathname + "?startindex=" + iter;
-						console.log("click");
+						// console.log("click");
 					});
+					$(document).on("mouseleave", ".item", function() {
+						$("body").find("#hover-desc").remove();
+					});
+					$(document).on("mouseenter", ".item", function() {
+						var desc = $(this).find("a").data("desc");
+						// console.log(desc);
+						$("body").append("<p id='hover-desc'>" + desc + "</p>");
+					});
+					$(document).on("mousemove", function(e) {
+						$("#hover-desc").css({
+							"top" : e.pageY,
+							"left" : e.pageX
+						});
+					});
+					// This code would embed the page in an iFrame, if only it had the permission.
+					/*
+					$(document).on("click", ".item", function() {
+						var url = $(this).find("a").attr("href");
+						console.log( $(this).find("a").attr("href") );
+
+						$("body").append("<div id='close'>X</div><div id='iframe-container'><iframe src='" + url + "' name='embeded-page' width=100% height=100%></iframe></div>")
+						return false;
+					});
+					*/
 				</script>
 				<footer>
-					<button id="load-more" class="faded a-tag button">LOAD MORE {{page}}</button>
+					<button id="load-more" class="faded a-tag">LOAD MORE {{page}}</button>
 				</footer>
 			</div>
 		</div>
